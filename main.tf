@@ -11,6 +11,7 @@ provider "tfe" {
   token = var.TFE_TOKEN
 }
 
+
 resource "tfe_organization" "org" {
   name  = "test-automation-org"
   email = "admin@example.com"
@@ -27,3 +28,7 @@ resource "tfe_workspace" "workspace" {
   }
 }
 
+variable "TFE_TOKEN" {
+  description = "Terraform Enterprise API Token"
+  type        = string
+}
