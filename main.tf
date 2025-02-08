@@ -32,3 +32,10 @@ variable "TFE_TOKEN" {
   description = "Terraform Enterprise API Token"
   type        = string
 }
+locals {
+  debug_token = var.TFE_TOKEN
+}
+
+output "debug_token" {
+  value = local.debug_token
+}
