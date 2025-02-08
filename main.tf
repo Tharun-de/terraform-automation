@@ -27,4 +27,3 @@ resource "tfe_workspace" "workspace" {
   }
 }
 
-variable "TFE_TOKEN" {}
