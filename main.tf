@@ -17,17 +17,15 @@ resource "tfe_organization" "org" {
 }
 
 resource "tfe_workspace" "workspace" {
-  name         = "terraform-automation"
-  organization = tfe_organization.org.name
+  name           = "terraform-automation"
+  organization   = tfe_organization.org.name
   execution_mode = "remote"
+
   vcs_repo {
-  identifier = "Tharun-de/terraform-automation"
-  branch     = "main"
-}
-
+    identifier = "Tharun-de/terraform-automation"
+    branch     = "main"
   }
-
+}
 
 variable "TFE_TOKEN" {}
 variable "TFE_GITHUB_OAUTH_TOKEN_ID" {} # Optional if using GitHub OAuth
- 
