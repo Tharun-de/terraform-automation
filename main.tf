@@ -20,7 +20,11 @@ resource "tfe_workspace" "workspace" {
   name         = "terraform-automation"
   organization = tfe_organization.org.name
   execution_mode = "remote"
-  
+  vcs_repo {
+  identifier = "Tharun-de/terraform-automation"
+  branch     = "main"
+}
+
   }
 
 
