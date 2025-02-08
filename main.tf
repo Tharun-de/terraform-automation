@@ -28,4 +28,3 @@ resource "tfe_workspace" "workspace" {
 }
 
 variable "TFE_TOKEN" {}
-variable "TFE_GITHUB_OAUTH_TOKEN_ID" {} # Optional if using GitHub OAuth
