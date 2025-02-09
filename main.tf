@@ -13,10 +13,11 @@ terraform {
 
 # Okta Provider
 provider "okta" {
-  org_name  = "trial-2582192-admin"  # Your Okta Org Name
+  org_name  = "trial-2582192"  # Remove the "-admin" part
   base_url  = "okta.com"
-  api_token = var.OKTA_TOKEN1       # Securely using Terraform variable
+  api_token = var.OKTA_TOKEN1
 }
+
 
 # HTTP Provider for SCIM API call
 provider "http" {}
