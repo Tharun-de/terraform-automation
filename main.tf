@@ -30,22 +30,24 @@ resource "okta_group" "hr" {
   description = "Access to Azure and HR tools"
 }
 
-# ✅ Assign Users to Groups Based on Role
+# ✅ Create New Employee in Okta
 resource "okta_user" "new_employee" {
   first_name  = "John"
   last_name   = "Doe"
   login       = "john.doe@example.com"
   email       = "john.doe@example.com"
-  group_ids   = [okta_group.developers.id]  # Assign to Developers
+  password    = "RandomPassword123!"  # Or use a generated password
+  status      = "ACTIVE"
 }
 
-# ✅ Assign Groups to Enterprise Apps (Jira, AWS, Azure)
-resource "okta_group_memberships" "jira_access" {
-  group_id = okta_group.developers.id  # Jira access for Developers
-  users    = [okta_user.new_employee.id]
+# ✅ Assign User to Developers Group
+resource "okta_group_membership" "developer_assignment" {
+  group_id = okta_group.developers.id
+  user_id  = okta_user.new_employee.id
 }
 
-resource "okta_group_memberships" "aws_access" {
-  group_id = okta_group.developers.id  # AWS access for Developers
-  users    = [okta_user.new_employee.id]
+# ✅ Assign User to HR Group (Example)
+resource "okta_group_membership" "hr_assignment" {
+  group_id = okta_group.hr.id
+  user_id  = okta_user.new_employee.id
 }
