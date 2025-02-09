@@ -4,37 +4,56 @@ terraform {
       source  = "okta/okta"
       version = ">= 4.13.1"
     }
+    http = {
+      source  = "hashicorp/http"
+      version = ">= 2.0"
+    }
   }
 }
 
-
-# Create an Okta SCIM App for Jira
-resource "okta_app_saml" "jira_scim" {
-  label                = "Jira SCIM Provisioning"
-  sso_url              = "https://tharunpilli01-1733868957997.atlassian.net/jira/your"
-  recipient            = "https://tharunpilli01-1733868957997.atlassian.net/jira/your"
-  destination          = "https://tharunpilli01-1733868957997.atlassian.net/jira/your"
-  audience             = "urn:okta:scim"
-  status               = "ACTIVE"
+# Okta Provider
+provider "okta" {
+  org_name  = "trial-2582192-admin"  # Your Okta Org Name
+  base_url  = "okta.com"
+  api_token = var.OKTA_TOKEN1       # Securely using Terraform variable
 }
 
-# SCIM API Integration
-resource "okta_app_api_integration" "jira_scim_api" {
-  app_id       = okta_app_saml.jira_scim.id
-  base_url     = "https://api.atlassian.com/scim/directory/576db93a-153c-45ed-8fce-60d673227148"  # Your SCIM Base URL
-  bearer_token = var.JIRA_SCIM_TOKEN  # Use a Terraform variable instead
+# HTTP Provider for SCIM API call
+provider "http" {}
+
+# SCIM API Call to configure the Jira SCIM app in Okta
+resource "http_request" "configure_scim" {
+  url    = "https://trial-2582192-admin.okta.com/api/v1/apps/0oaonxeu7xsluLcio697"
+  method = "PUT"
+
+  headers = {
+    Authorization = "SSWS ${var.OKTA_TOKEN1}"  # Securely using Terraform variable
+    Content-Type  = "application/json"
+  }
+
+  body = jsonencode({
+    settings = {
+      app = {
+        baseUrl = var.JIRA_SCIM_URL  # SCIM Base URL stored securely
+        apiToken = var.JIRA_SCIM_TOKEN  # SCIM API Token stored securely
+      }
+    }
+  })
 }
 
-
-# SCIM User Attribute Mapping
-resource "okta_app_user_schema" "jira_user_mapping" {
-  app_id        = okta_app_saml.jira_scim.id
-  index         = "email"
-  title         = "Email"
-  external_name = "urn:ietf:params:scim:schemas:core:2.0:User:email"
-  type          = "string"
+# Declare Terraform Variables (No Hardcoded Secrets)
+variable "OKTA_TOKEN1" {
+  description = "Okta API Token for making SCIM configuration changes"
+  type        = string
 }
+
+variable "JIRA_SCIM_URL" {
+  description = "SCIM Base URL for Jira"
+  type        = string
+}
+
 variable "JIRA_SCIM_TOKEN" {
   description = "SCIM API Token for Jira integration"
   type        = string
+  sensitive   = true  # Marks the variable as sensitive in Terraform
 }
