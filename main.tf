@@ -31,12 +31,12 @@ resource "okta_group" "hr" {
 }
 
 # ✅ Assign YOUR Okta User to Groups
-resource "okta_group_membership" "developer_assignment" {
+resource "okta_group_memberships" "developer_assignment" {
   group_id = okta_group.developers.id
   user_id  = "00uooahsz3DQfYyFU697"  # ✅ Your real Okta user ID
 }
 
-resource "okta_group_membership" "hr_assignment" {
+resource "okta_group_memberships" "hr_assignment" {
   group_id = okta_group.hr.id
   user_id  = "00uooahsz3DQfYyFU697"  # ✅ Your real Okta user ID
 }
