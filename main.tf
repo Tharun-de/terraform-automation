@@ -18,10 +18,16 @@ provider "okta" {
 resource "null_resource" "configure_scim" {
   provisioner "local-exec" {
     command = <<EOT
-      curl -X PUT "https://trial-2582192.okta.com/api/v1/apps/0oaonyrhuirAG0D0e697" \
+      curl -X PUT "https://trial-2582192.okta.com/api/v1/apps/0oaonyrhuirAG0D0e697/lifecycle/activate" \
       -H "Authorization: SSWS ${var.OKTA_TOKEN1}" \
       -H "Content-Type: application/json" \
       -d '{
+        "credentials": {
+          "oauthClient": {
+            "client_id": "",
+            "client_secret": "${var.JIRA_SCIM_TOKEN}"
+          }
+        },
         "settings": {
           "app": {
             "baseUrl": "${var.JIRA_SCIM_URL}",
@@ -43,6 +49,7 @@ variable "OKTA_TOKEN1" {
 variable "JIRA_SCIM_URL" {
   description = "SCIM Base URL for Jira"
   type        = string
+  default     = "https://api.atlassian.com/scim/directory/576db93a-153c-45ed-8fce-60d673227148"
 }
 
 variable "JIRA_SCIM_TOKEN" {
