@@ -41,13 +41,13 @@ resource "okta_user" "new_employee" {
 }
 
 # ✅ Assign User to Developers Group
-resource "okta_group_membership" "developer_assignment" {
+resource "okta_group_memberships" "developer_assignment" {
   group_id = okta_group.developers.id
   user_id  = okta_user.new_employee.id
 }
 
 # ✅ Assign User to HR Group (Example)
-resource "okta_group_membership" "hr_assignment" {
+resource "okta_group_memberships" "hr_assignment" {
   group_id = okta_group.hr.id
   user_id  = okta_user.new_employee.id
 }
