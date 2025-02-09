@@ -10,9 +10,9 @@ terraform {
 provider "okta" {
   org_name  = "trial-2582192" # Example: "dev-123456"
   base_url  = "okta.com"
-  api_token = var.OKTA_TOKEN
+  api_token = var.OKTA_TOKEN1
 }
-variable "OKTA_TOKEN" {
+variable "OKTA_TOKEN1" {
   description = "API Token for Okta Provider"
   type        = string
 }
