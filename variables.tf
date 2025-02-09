@@ -8,3 +8,8 @@ variable "JIRA_SCIM_TOKEN" {
   type        = string
   sensitive   = true
 }
+variable "OKTA_TOKEN1" {
+  description = "Okta API Token for managing users and groups"
+  type        = string
+  sensitive   = true
+}
