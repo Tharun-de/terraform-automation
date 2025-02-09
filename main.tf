@@ -22,24 +22,24 @@ provider "okta" {
 provider "http" {}
 
 # SCIM API Call to configure the Jira SCIM app in Okta
-resource "http_request" "configure_scim" {
-  url    = "https://trial-2582192-admin.okta.com/api/v1/apps/0oaonxeu7xsluLcio697"
-  method = "PUT"
-
-  headers = {
-    Authorization = "SSWS ${var.OKTA_TOKEN1}"  # Securely using Terraform variable
-    Content-Type  = "application/json"
+resource "null_resource" "configure_scim" {
+  provisioner "local-exec" {
+    command = <<EOT
+      curl -X PUT "https://trial-2582192-admin.okta.com/api/v1/apps/0oaonxeu7xsluLcio697" \
+      -H "Authorization: SSWS ${var.OKTA_TOKEN1}" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "settings": {
+          "app": {
+            "baseUrl": "${var.JIRA_SCIM_URL}",
+            "apiToken": "${var.JIRA_SCIM_TOKEN}"
+          }
+        }
+      }'
+    EOT
   }
-
-  body = jsonencode({
-    settings = {
-      app = {
-        baseUrl = var.JIRA_SCIM_URL  # SCIM Base URL stored securely
-        apiToken = var.JIRA_SCIM_TOKEN  # SCIM API Token stored securely
-      }
-    }
-  })
 }
+
 
 # Declare Terraform Variables (No Hardcoded Secrets)
 variable "OKTA_TOKEN1" {
