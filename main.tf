@@ -7,53 +7,45 @@ terraform {
   }
 }
 
-# Okta Provider Configuration
+# ✅ Okta Provider Configuration
 provider "okta" {
   org_name  = "trial-2582192"  # Your Okta domain (without "-admin")
   base_url  = "okta.com"
-  api_token = var.OKTA_TOKEN1  # Securely using Terraform variable
+  api_token = var.OKTA_TOKEN
 }
 
-# Apply SCIM Provisioning Settings to Existing Jira App in Okta
-resource "null_resource" "configure_scim" {
-  provisioner "local-exec" {
-    command = <<EOT
-      curl -X PUT "https://trial-2582192.okta.com/api/v1/apps/0oaonyrhuirAG0D0e697/lifecycle/activate" \
-      -H "Authorization: SSWS ${var.OKTA_TOKEN1}" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "credentials": {
-          "oauthClient": {
-            "client_id": "",
-            "client_secret": "${var.JIRA_SCIM_TOKEN}"
-          }
-        },
-        "settings": {
-          "app": {
-            "baseUrl": "${var.JIRA_SCIM_URL}",
-            "apiToken": "${var.JIRA_SCIM_TOKEN}"
-          }
-        }
-      }'
-    EOT
-  }
+# ✅ Create Okta RBAC Groups
+resource "okta_group" "admins" {
+  name        = "Admins"
+  description = "Full access to all enterprise apps"
 }
 
-# Declare Required Terraform Variables
-variable "OKTA_TOKEN1" {
-  description = "Okta API Token for managing SCIM settings"
-  type        = string
-  sensitive   = true
+resource "okta_group" "developers" {
+  name        = "Developers"
+  description = "Access to Jira and AWS"
 }
 
-variable "JIRA_SCIM_URL" {
-  description = "SCIM Base URL for Jira"
-  type        = string
-  default     = "https://api.atlassian.com/scim/directory/576db93a-153c-45ed-8fce-60d673227148"
+resource "okta_group" "hr" {
+  name        = "HR"
+  description = "Access to Azure and HR tools"
 }
 
-variable "JIRA_SCIM_TOKEN" {
-  description = "SCIM API Token for Jira"
-  type        = string
-  sensitive   = true
+# ✅ Assign Users to Groups Based on Role
+resource "okta_user" "new_employee" {
+  first_name  = "John"
+  last_name   = "Doe"
+  login       = "john.doe@example.com"
+  email       = "john.doe@example.com"
+  group_ids   = [okta_group.developers.id]  # Assign to Developers
+}
+
+# ✅ Assign Groups to Enterprise Apps (Jira, AWS, Azure)
+resource "okta_group_memberships" "jira_access" {
+  group_id = okta_group.developers.id  # Jira access for Developers
+  users    = [okta_user.new_employee.id]
+}
+
+resource "okta_group_memberships" "aws_access" {
+  group_id = okta_group.developers.id  # AWS access for Developers
+  users    = [okta_user.new_employee.id]
 }
