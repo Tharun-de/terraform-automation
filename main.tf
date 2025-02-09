@@ -40,6 +40,29 @@ resource "null_resource" "configure_scim" {
     EOT
   }
 }
+resource "okta_app_oauth" "jira" {
+  label               = "Jira SCIM Provisioning"
+  type                = "browser"
+  grant_types         = ["authorization_code", "implicit"]
+  redirect_uris       = ["https://api.atlassian.com/scim/directory/576db93a-153c-45ed-8fce-60d673227148"]
+  response_types      = ["code", "id_token", "token"]
+  token_endpoint_auth_method = "client_secret_basic"
+  status              = "ACTIVE"
+  sign_on_mode        = "OPENID_CONNECT"
+
+  settings = {
+    app = {
+      baseUrl = var.JIRA_SCIM_URL
+    }
+  }
+
+  credentials {
+    oauthClient {
+      client_id     = "known_after_apply"
+      client_secret = "known_after_apply"
+    }
+  }
+}
 
 
 # Declare Terraform Variables (No Hardcoded Secrets)
