@@ -1,8 +1,12 @@
-provider "okta" {
-  org_name  = "your-okta-org-name"  # Replace with your Okta organization name
-  base_url  = "okta.com"
-  api_token = var.OKTA_TOKEN       # Replace with your Okta API token variable
+terraform {
+  required_providers {
+    okta = {
+      source  = "okta/okta"
+      version = ">= 4.13.1"
+    }
+  }
 }
+
 
 # Create an Okta SCIM App for Jira
 resource "okta_app_saml" "jira_scim" {
