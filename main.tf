@@ -1,41 +1,22 @@
 terraform {
   required_providers {
-    tfe = {
-      source  = "hashicorp/tfe"
-      version = ">= 0.42"
+    okta = {
+      source  = "okta/okta"
+      version = ">= 3.0"
     }
   }
 }
 
-provider "tfe" {
-  token = var.TFE_TOKEN
+provider "okta" {
+  org_name  = "trial-2582192" # Example: "dev-123456"
+  base_url  = "okta.com"
+  api_token = var.OKTA_TOKEN
 }
-
-
-resource "tfe_organization" "org" {
-  name  = "test-automation-org"
-  email = "admin@example.com"
-}
-
-resource "tfe_workspace" "workspace" {
-  name           = "terraform-automation"
-  organization   = tfe_organization.org.name
-  execution_mode = "remote"
-
-  vcs_repo {
-    identifier = "Tharun-de/terraform-automation"
-    branch     = "main"
-  }
-}
-
-variable "TFE_TOKEN" {
-  description = "Terraform Enterprise API Token"
-  type        = string
-}
-locals {
-  debug_token = var.TFE_TOKEN
-}
-
-output "debug_token" {
-  value = local.debug_token
+resource "okta_app_oauth" "jira" {
+  label         = "Jira Cloud"
+  type          = "browser"
+  grant_types   = ["authorization_code", "implicit"]
+  redirect_uris = ["https://tharunpilli01-1733868957997.atlassian.net/jira/your"]
+  response_types = ["code", "id_token", "token"]
+  post_logout_redirect_uris = ["https://tharunpilli01-1733868957997.atlassian.net/jira/your/logout"]
 }
