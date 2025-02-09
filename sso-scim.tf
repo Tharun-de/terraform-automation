@@ -1,9 +1,9 @@
-# ✅ Enable SCIM Provisioning for Jira
+# ✅ Enable SCIM Provisioning for Jira (Fixed Token Name)
 resource "null_resource" "configure_scim_jira" {
   provisioner "local-exec" {
     command = <<EOT
       curl -X PUT "https://trial-2582192.okta.com/api/v1/apps/0oaonyrhuirAG0D0e697" \
-      -H "Authorization: SSWS ${var.OKTA_TOKEN}" \
+      -H "Authorization: SSWS ${var.OKTA_TOKEN1}" \
       -H "Content-Type: application/json" \
       -d '{
         "settings": {

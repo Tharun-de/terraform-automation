@@ -7,7 +7,6 @@ variable "OKTA_TOKEN1" {
 variable "JIRA_SCIM_URL" {
   description = "SCIM Base URL for Jira"
   type        = string
-  default     = "https://api.atlassian.com/scim/directory/576db93a-153c-45ed-8fce-60d673227148"
 }
 
 variable "JIRA_SCIM_TOKEN" {
