@@ -28,9 +28,6 @@ resource "okta_app_oauth" "jira" {
 
   # Optional: Set app status to active
   status = "ACTIVE"
-
-  # Optional: Sign-on mode for OpenID Connect (OIDC)
-  sign_on_mode = "OPENID_CONNECT"
 }
 
 # Configure SCIM Settings via API Call
