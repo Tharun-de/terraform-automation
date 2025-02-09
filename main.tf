@@ -30,13 +30,14 @@ resource "okta_group" "hr" {
   description = "Access to Azure and HR tools"
 }
 
-# ✅ Assign YOUR Okta User to Groups
-resource "okta_group_memberships" "developer_assignment" {
+# ✅ Assign YOUR Okta User to Developers Group
+resource "okta_group_membership" "developer_assignment" {
   group_id = okta_group.developers.id
   user_id  = "00uooahsz3DQfYyFU697"  # ✅ Your real Okta user ID
 }
 
-resource "okta_group_memberships" "hr_assignment" {
+# ✅ Assign YOUR Okta User to HR Group
+resource "okta_group_membership" "hr_assignment" {
   group_id = okta_group.hr.id
   user_id  = "00uooahsz3DQfYyFU697"  # ✅ Your real Okta user ID
 }
