@@ -11,7 +11,7 @@ terraform {
 provider "okta" {
   org_name  = "trial-2582192"  # Your Okta domain (without "-admin")
   base_url  = "okta.com"
-  api_token = var.OKTA_TOKEN
+  api_token = var.OKTA_TOKEN1
 }
 
 # ✅ Create Okta RBAC Groups

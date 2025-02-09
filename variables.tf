@@ -1,4 +1,4 @@
-variable "OKTA_TOKEN" {
+variable "OKTA_TOKEN1" {
   description = "Okta API Token"
   type        = string
   sensitive   = true
