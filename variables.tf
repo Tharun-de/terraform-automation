@@ -1,16 +1,11 @@
 variable "OKTA_TOKEN1" {
-  description = "Okta API Token"
+  description = "Okta API Token for managing users and groups"
   type        = string
   sensitive   = true
 }
 
-variable "JIRA_SCIM_URL" {
-  description = "SCIM Base URL for Jira"
+variable "EMAIL_FILTER" {
+  description = "Filter users based on email domain (e.g., company.com)"
   type        = string
-}
-
-variable "JIRA_SCIM_TOKEN" {
-  description = "SCIM API Token for Jira"
-  type        = string
-  sensitive   = true
+  default     = "@company.com"
 }
