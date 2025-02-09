@@ -12,6 +12,11 @@ provider "okta" {
   base_url  = "okta.com"
   api_token = var.OKTA_TOKEN
 }
+variable "OKTA_TOKEN" {
+  description = "API Token for Okta Provider"
+  type        = string
+}
+
 resource "okta_app_oauth" "jira" {
   label         = "Jira Cloud"
   type          = "browser"
